@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The Xpedition Presents: The Traitor 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#2a0004"/>
+<style>
+:root{ --bg:#0b0003; --bg-2:#1f0005; --gold:#f1d38a; --ink:#e9e2dc; --shadow:rgba(0,0,0,.85); --win-blue:#4a7aff; --top-cyan:#00bfff; --high-blue:#98f5ff; --low-pink:#ffb6c1; --loss-red:#ff4d4d }
+*{box-sizing:border-box}
+html,body{height:100%}
+html, body, a, button, .btn, .cta-sound, .tab-btn, .infocard, * { cursor: url('assets/knife.png') 0 0, auto; }
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 700px at 30% 0%, #320007 0%, transparent 60%),
+    radial-gradient(1000px 700px at 70% 100%, #150003 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  color:var(--ink);
+  font-family: "Cormorant Garamond", serif;
+  line-height:1.55;
+  overflow-x:hidden;
+  font-size: 19px;
+}
+body.gated{ overflow:hidden; }
+img{max-width:100%; display:block}
+.container{max-width:1100px; margin:0 auto; padding:24px 18px}
+.gold-emboss{font-family:"Cinzel",serif; letter-spacing:.08em; text-transform:uppercase; color:var(--gold);
+  text-shadow:0 1px 0 #fff2,0 2px 6px #0009,0 0 30px rgba(255,228,134,.08),0 0 70px rgba(255,215,128,.05)}
+
+/* Header */
+.header{position:relative; display:flex; gap:18px; align-items:center; justify-content:space-between;
+  padding:16px 18px; border-bottom:1px solid #ffffff1a; background:linear-gradient(180deg,#25000677,#0000); backdrop-filter:blur(6px)}
+.brand{display:flex; align-items:center; gap:14px}
+.brand img{height:72px; width:auto; filter:drop-shadow(0 8px 16px var(--shadow))}
+.title-wrap h1{font-size:28px; margin:0;}
+.title-wrap .kicker{font-size:14px; opacity:.85; letter-spacing:.1em}
+.header-actions{display:flex; gap:10px; align-items:center}
+.cta-sound,.cta-home{display:flex; gap:10px; align-items:center; border:1px solid #ffffff22; background:#0000003a; color:#fff;
+  padding:10px 14px; border-radius:10px; cursor:pointer; box-shadow:inset 0 0 0 1px #ffffff12; text-decoration:none}
+.cta-sound[aria-pressed="true"]{box-shadow: inset 0 0 0 2px #caa44e88;}
+.cta-sound:hover,.cta-home:hover{background:#00000055}
+
+.hero{ padding:20px 0 10px }
+.hero img{ width:100%; max-height:50vh; object-fit:cover; border-radius:18px; box-shadow:0 30px 60px var(--shadow) }
+
+.divider{ margin:40px auto; height:2px; width:min(720px,90%); background:linear-gradient(90deg,transparent,var(--gold),transparent); position:relative }
+
+/* Bonju Narrator Chip */
+.bonju-chip { display: flex; gap: 20px; background: rgba(20, 0, 5, 0.85); border: 1px solid #5a1a22; border-radius: 16px; padding: 20px; margin-bottom: 35px; align-items: center; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+.bonju-avatar { width: 85px; height: 85px; background: #3d0009; border: 2px solid var(--gold); border-radius: 50%; flex-shrink: 0; overflow: hidden; box-shadow: 0 0 15px rgba(241,211,138,0.2); }
+.bonju-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.bonju-text { margin: 0; font-style: italic; font-size: 20px; color: #f2ede9; }
+.bonju-text b { color: var(--gold); font-family: "Cinzel", serif; font-size: 15px; letter-spacing: 0.05em; display: block; margin-bottom: 4px; font-style: normal; }
+
+/* Panel base */
+.panel{ background:linear-gradient(180deg,#0a0003ee,#120005cc); border:1px solid #ffffff15; border-radius:18px; padding:35px 30px; box-shadow:0 30px 80px rgba(0,0,0,.65); margin-bottom: 40px; }
+.panel p { margin-top: 0; margin-bottom: 20px; opacity: 0.9; }
+
+/* Tabs */
+.tabs-container { display: flex; justify-content: center; gap: 15px; margin: 0 0 35px; flex-wrap: wrap; }
+.tab-btn {
+  background: linear-gradient(180deg, #120003, #050001); border: 1px solid #ffffff22; color: #a59285;
+  padding: 14px 28px; font-family: "Cinzel", serif; font-size: 15px; border-radius: 8px; transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5); font-weight: 600; letter-spacing: 0.05em;
+}
+.tab-btn.active, .tab-btn:hover {
+  background: linear-gradient(180deg, #4a0008, #2b0006); border-color: var(--gold); color: var(--gold);
+  box-shadow: 0 0 20px rgba(241, 211, 138, 0.25); transform: translateY(-2px);
+}
+
+/* Informative Blocks & Content Layouts */
+.info-flow { display: none; opacity: 0; }
+.info-flow.active { display: block; opacity: 1; animation: fadeIn 0.5s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 25px; }
+@media (max-width: 800px) { .grid-2col { grid-template-columns: 1fr; } }
+
+/* CSS Flat Graphics (No shadows/gradients inside) */
+.flat-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-family: "Cinzel", serif; font-size: 16px; background: #070002; border: 2px solid #ffffff15; }
+.flat-table th, .flat-table td { padding: 12px; text-align: center; border: 1px solid #ffffff15; }
+.flat-table th { background: #1a0005; color: var(--gold); }
+
+.chip-status { display: inline-block; padding: 4px 12px; font-weight: 800; font-size: 14px; border-radius: 4px; text-transform: uppercase; color: #000; letter-spacing: 0.05em; }
+.chip-status.win { background-color: var(--win-blue); }
+.chip-status.top2 { background-color: var(--top-cyan); }
+.chip-status.high { background-color: var(--high-blue); }
+.chip-status.safe { background-color: #ffffff; color: #000; }
+.chip-status.low { background-color: var(--low-pink); }
+.chip-status.loss { background-color: var(--loss-red); }
+
+/* Bracket Graphic */
+.bracket-visual { display: flex; flex-direction: column; gap: 15px; background: #080002; border: 2px dashed #ffffff20; padding: 20px; border-radius: 12px; }
+.bracket-row { display: flex; justify-content: space-between; align-items: center; background: #150005; border: 1px solid #ffffff10; padding: 10px 15px; border-radius: 6px; }
+.bracket-group { font-family: "Cinzel", serif; font-weight: bold; color: var(--gold); }
+.bracket-count { font-size: 15px; opacity: 0.7; font-family: "Cinzel", serif; }
+
+/* Vote Box Visual */
+.vote-box-graphic { display: flex; gap: 20px; justify-content: center; margin: 25px 0; flex-wrap: wrap; }
+.vote-option-card { width: 220px; background: #110004; border: 2px solid #ffffff15; border-radius: 10px; padding: 20px; text-align: center; transition: border-color 0.3s; }
+.vote-option-card h4 { margin: 0 0 10px 0; font-family: "Cinzel", serif; font-size: 18px; color: var(--gold); }
+.vote-option-card p { font-size: 15px; opacity: 0.8; margin: 0; line-height: 1.4; }
+.vote-option-card.critical { border-color: #5a1a22; }
+
+/* Lists format */
+ul.custom-list { padding-left: 20px; margin: 15px 0; }
+ul.custom-list li { margin-bottom: 12px; position: relative; list-style: none; }
+ul.custom-list li::before { content: "▪"; color: var(--gold); position: absolute; left: -18px; top: -1px; font-size: 16px; }
+
+.highlight-box { background: rgba(74, 0, 8, 0.2); border-left: 4px solid var(--gold); padding: 18px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+.highlight-box h4 { margin: 0 0 8px 0; font-family: "Cinzel", serif; color: var(--gold); font-size: 17px; }
+.highlight-box p { margin: 0; font-size: 16px; opacity: 0.95; }
+
+.footer{ text-align:center; padding:30px 0 60px; opacity:.6; font-size:14px; border-top: 1px solid #ffffff10; font-family: "Cinzel", serif; }
+
+/* Gate + Doors */
+#gate{ position:fixed; inset:0; background: radial-gradient(1200px 800px at 50% 30%, #2f000a, #050001); display:grid; place-items:center; z-index:1000; color:#fff; }
+.gate-card{ text-align:center; max-width:720px; padding:35px; border-radius:18px; background:#070002ee; border:1px solid #ffffff15; box-shadow:0 30px 80px var(--shadow) }
+.gate-card h2{ font-size:38px; margin: 0 0 10px 0; }
+.gate-card p{ font-size:18px; opacity: 0.8; margin: 0 0 25px 0; }
+.btn{ display:inline-block; padding:14px 28px; border-radius:8px; border:1px solid #caa44e88; background:linear-gradient(180deg,#3a1d00,#1a0d00); color:#f7e9b4; font-weight:700; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; font-family: "Cinzel", serif; font-size: 14px; }
+.btn:hover { filter:brightness(1.2); box-shadow: 0 0 15px rgba(241,211,138,0.2); } .btn:active{ transform:translateY(1px) }
+
+#doors{ position:fixed; inset:0; display:none; z-index:1200; pointer-events:none; }
+#doors .door-panel{ position:absolute; top:0; width:50%; height:100%; background: linear-gradient(180deg, #1b0004, #050001); box-shadow: inset 0 0 100px #000, 0 0 40px #000; border:1px solid #4a0008; will-change: transform; }
+#doors .left{ left:0; border-right:1px solid #4a0008; transform:translateX(0); }
+#doors .right{ right:0; border-left:1px solid #4a0008; transform:translateX(0); }
+#doors.open .left{ animation: openLeft 1.2s ease forwards }
+#doors.open .right{ animation: openRight 1.2s ease forwards }
+@keyframes openLeft{ 0%{ transform: translateX(0) } 100%{ transform: translateX(-100%) } }
+@keyframes openRight{ 0%{ transform: translateX(0) } 100%{ transform: translateX(100%) } }
+
+/* Overlay de LOGO al entrar */
+#logoOverlay{ position:fixed; inset:0; display:none; place-items:center; z-index:1300; pointer-events:none; }
+#logoOverlay.show{ display:grid; }
+#logoOverlay .logo{ width:min(65vw, 600px); max-width:600px; filter:drop-shadow(0 20px 80px #000); opacity:0; transform:scale(.96); transition:opacity .5s ease, transform .6s ease; }
+#logoOverlay.show .logo{ opacity:1; transform:scale(1); }
+#logoOverlay.fade .logo{ opacity:0; filter:blur(2px); transition: opacity .8s ease, filter .8s ease; }
+</style>
+</head>
+<body class="gated">
+<header class="header container">
+  <div class="brand">
+    <img src="The Traitor 1 Logo Color.png" alt="The Traitor Logo" onerror="this.style.display='none'"/>
+    <div class="title-wrap">
+      <div class="kicker gold-emboss">The Xpedition Presents:</div>
+      <h1 class="gold-emboss">The Traitor 3: Revelaciones</h1>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="cta-sound" id="toggleSound" aria-pressed="false" title="Música de fondo"><span>🔊</span><span>Sonido</span></button>
+    <a class="cta-home" id="homeBtn" href="https://thexpedition.github.io/The-Xpedition-Official/" target="_blank" rel="noopener">Inicio</a>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <img src="The Traitor Portada.png" alt="Portada The Traitor 3" onerror="this.style.display='none'"/>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Pestañas Principales del Formato -->
+  <div class="tabs-container">
+    <button class="tab-btn active" data-target="fase1"><span class="icon">🔱</span> Fase 1: Los Grupos</button>
+    <button class="tab-btn" data-target="juiciofinal"><span class="icon">⚖️</span> El Juicio Final</button>
+    <button class="tab-btn" data-target="fase2"><span class="icon">💰</span> Fase 2: Formato Final</button>
+  </div>
+
+  <!-- SECCIÓN FASE 1 -->
+  <div id="fase1" class="info-flow active">
+    <div class="bonju-chip">
+      <div class="bonju-avatar"><img src="personajes/bonju.png" alt="Bonju"></div>
+      <div class="bonju-text">
+        <b>INTRODUCCIÓN</b>
+        "Bienvenidos a una nueva era de traición. Esta vez la experiencia inicia fragmentada. La oscuridad protegerá las identidades y solo la excelencia oculta en los retos dictará quién merece dar el siguiente paso..."
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="gold-emboss">Estructura de Grupos</h2>
+      <p>La competencia arranca con una división por grupos o <b>brackets cerrados</b>. Cada grupo funcionará de manera aislada bajo estrictas mecánicas psicológicas donde nadie puede confiar en quien tiene al lado.</p>
+      
+      <div class="grid-2col">
+        <div>
+          <h3 class="gold-emboss" style="font-size:22px; margin-top:0;">Reglas del Tablero</h3>
+          <ul class="custom-list">
+            <li><b>12 Participantes por Bracket:</b> Cada grupo opera de manera completamente independiente como una mini-experiencia aislada.</li>
+            <li><b>Amenaza Oculta (1 a 3 Traidores):</b> El formato asignará de forma aleatoria entre 1, 2 o 3 Traidores por grupo. ¡Nadie en la mansión sabrá cuántos rivales hay infiltrados!</li>
+            <li><b>Aislamiento Absoluto:</b> Los Traidores NO se conocen entre ellos mismos al inicio, provocando desconfianza incluso entre los propios miembros del bando rival.</li>
+            <li><b>Sin Juicios Diarios:</b> Durante la convivencia regular de los brackets no habrá votaciones de expulsión masivas; la mansión sufrirá únicamente <b>asesinados directos</b> cada día/episodio.</li>
+          </ul>
+        </div>
+
+        <div class="bracket-visual">
+          <div class="bracket-group" style="text-align: center; margin-bottom: 5px;">Estructura de la Fase 1</div>
+          <div class="bracket-row"><span>Grupo / Bracket A</span> <span class="bracket-count">12 Miembros</span></div>
+          <div class="bracket-row"><span>Grupo / Bracket B</span> <span class="bracket-count">12 Miembros</span></div>
+          <div class="bracket-row"><span>Grupo / Bracket C</span> <span class="bracket-count">12 Miembros</span></div>
+          <div class="bracket-group" style="text-align: center; margin-top: 5px; font-size:14px; color:#ff4d4d;">[ 1-3 Traidores al Azar por Bloque ]</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="gold-emboss">La Tabla Secreta de Desempeño</h2>
+      <p>Cada reto sumará o restará puntaje de forma silenciosa. La posición exacta en la tabla general se mantendrá en <b>secreto absoluto</b>; ningún participante conocerá su ubicación real.</p>
+      
+      <table class="flat-table">
+        <thead>
+          <tr>
+            <th>Rendimiento en el Reto</th>
+            <th>Etiqueta</th>
+            <th>Impacto en Puntos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Ganador Absoluto</td><td><span class="chip-status win">WIN</span></td><td>+3 Puntos</td></tr>
+          <tr><td>Segundo Lugar</td><td><span class="chip-status top2">TOP2</span></td><td>+2 Puntos</td></tr>
+          <tr><td>Rendimiento Alto</td><td><span class="chip-status high">HIGH</span></td><td>+1 Punto</td></tr>
+          <tr><td>Rendimiento Estándar</td><td><span class="chip-status safe">SAFE</span></td><td>0 Puntos</td></tr>
+          <tr><td>Rendimiento Bajo</td><td><span class="chip-status low">LOW</span></td><td>-1 Punto</td></tr>
+          <tr><td>Peor Rendimiento</td><td><span class="chip-status loss">LOSS</span></td><td>-2 Puntos</td></tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box">
+        <h4>Inmunidad Invisible y el Engaño del Asesinato</h4>
+        <p>Solo el o los Traidores del grupo descubrirán de forma indirecta quién obtuvo el estatus de <b>WIN</b> (+3). Si durante la noche intentan asesinar al ganador del reto, se les notificará en privado que <b>"no es posible eliminar a ese participante"</b>. De esta manera, los traidores obtienen valiosa información estratégica a ciegas, mientras el resto sigue en completa incertidumbre.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="gold-emboss">La Purga de los 8</h2>
+      <p>Cuando la convivencia reduzca el bracket a exactamente <b>8 participantes</b>, se disputará el último reto por la inmunidad más importante de la fase. Los resultados alterarán el destino de forma radical:</p>
+      
+      <ul class="custom-list">
+        <li><b>Corte Automático por Puntos:</b> Los 4 participantes con menor cantidad de puntos acumulados hasta ese instante quedarán eliminados de inmediato y de forma fulminante, perdiendo todo derecho a participar en la recta final del bracket.</li>
+        <li><b>Salvación:</b> Si un jugador en riesgo inminente de eliminación por bajo puntaje logra ganar este último reto estratégico (<b>WIN</b>), se salva automáticamente de la purga masiva.</li>
+        <li><b>Efecto Colateral:</b> Al salvarse el ganador, los 4 eliminados se definirán recalculando estrictamente los puntajes más bajos entre los 7 participantes restantes del grupo. Los 4 sobrevivientes definitivos avanzarán directo a la mesa del Juicio Final.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECCIÓN EL JUICIO FINAL -->
+  <div id="juiciofinal" class="info-flow">
+    <div class="bonju-chip">
+      <div class="bonju-avatar"><img src="personajes/bonju.png" alt="Bonju"></div>
+      <div class="bonju-text">
+        <b>EL CONSEJO DE LOS CUATRO:</b>
+        "Cuatro sobrevivientes han llegado a la mesa de deliberación. Nadie sabe si está sentado al lado de su salvador o de su verdugo. Es momento de mirarse a los ojos de forma pública y decidir el destino del grupo..."
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="gold-emboss">Mecánica Única del Juicio de Bracket</h2>
+      <p>Los 4 finalistas de cada grupo se enfrentarán al <b>único y definitivo juicio</b> de la fase. Nadie conoce la identidad de los demás ni cuántos rivales reales quedan con vida en la mesa. La primera gran decisión se tomará mediante un veredicto de curso obligatorio y de carácter <b>PÚBLICO</b>:</p>
+
+      <div class="vote-box-graphic">
+        <div class="vote-option-card critical">
+          <h4>Votar por TERMINAR</h4>
+          <p>Se detiene el juego del bracket y se revelan las identidades ocultas de forma instantánea en la mesa.</p>
+        </div>
+        <div class="vote-option-card">
+          <h4>Votar por CONTINUAR</h4>
+          <p>La mesa decide que la amenaza sigue latente y se abre un proceso de ejecución interna inmediata.</p>
+        </div>
+      </div>
+
+      <div class="grid-2col" style="margin-top:30px;">
+        <div>
+          <h3 class="gold-emboss" style="color:#ff4d4d; font-size:20px; margin-top:0;">Consecuencias de TERMINAR EL JUEGO</h3>
+          <ul class="custom-list">
+            <li>Si al abrir las cartas queda **uno o más Traidores** infiltrados en la mesa, los rivales ganan la fase automáticamente y los inocentes son ejecutados en el acto.</li>
+            <li>Si se decide terminar el juego y **NO hay ningún Traidor** presente, los inocentes ganan la experiencia limpia y avanzan con éxito.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="gold-emboss" style="color:#27c76f; font-size:20px; margin-top:0;">Consecuencias de CONTINUAR EL JUEGO</h3>
+          <ul class="custom-list">
+            <li>Se inicia una **Votación Pública Cara a Cara**. Cada miembro de la mesa expondrá sus argumentos y señalará directamente a quién considera traidor.</li>
+            <li>La persona con mayor cantidad de votos acumulados en su contra será ejecutada inmediatamente.</li>
+            <li><b>Leyes de Empate Extremo:</b> En caso de empate entre dos personas, ambas mueren. Si se genera un empate grupal fragmentado, **todos los miembros de la mesa son ejecutados en el acto**, cerrando el bracket en un fracaso absoluto.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN FASE 2 -->
+  <div id="fase2" class="info-flow">
+    <div class="bonju-chip">
+      <div class="bonju-avatar"><img src="personajes/bonju.png" alt="Bonju"></div>
+      <div class="bonju-text">
+        <b>LA RECTA FINAL:</b>
+        "Los sobrevivientes de todos los brackets se unen bajo un único techo. Se acabaron los secretos colectivos; ahora tus propios puntos son tu escudo o el precio para salvar a aquellos que juraste proteger..."
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="gold-emboss">La Economía del Sacrificio Colectivo</h2>
+      <p>Todos los participantes que superen la Fase 1 confluyen en la fase definitiva. A partir de este momento, el juego muta hacia un sistema transaccional estricto gobernado por puntos individuales:</p>
+
+      <ul class="custom-list">
+        <li><b>Puntajes Exclusivamente Positivos:</b> Se elimina la escala negativa de la fase anterior. Los retos solo inyectarán puntos de carácter positivo a los puestos más destacados del episodio (WIN, TOPs, HIGHs).</li>
+        <li><b>Nominación por Rendimiento Bajo:</b> Los participantes que demuestren el peor desempeño en los desafíos quedarán nominados de forma directa en riesgo de eliminación.</li>
+        <li><b>El Juicio por Ofrenda:</b> La única manera de emitir un voto de salvación para rescatar a un nominado es **pagarlo restando puntos de tu propia tabla general**.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <h4>El Dilema del Traidor Egoísta</h4>
+        <p>Retener tus puntos intactos te acerca a la victoria y te posiciona en la cima para ganar la temporada, pero condenas a tus aliados más cercanos a la eliminación por falta de apoyo. Ofrecer tus puntos para salvar a un compañero limpia tu reputación social, pero te debilita drásticamente de manera individual. No existen transferencias ni regalos directos de puntos permitted.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="gold-emboss">Cofres Secretos y Final Repentino</h2>
+      <p>La etapa de cierre introduce mecánicas comerciales agresivas diseñadas para romper pactos y tentar la lealtad de los más fuertes:</p>
+
+      <div class="grid-2col" style="margin-top:0;">
+        <div>
+          <h3 class="gold-emboss" style="font-size:20px; margin-top:0;">Los Cofres de la Mansión</h3>
+          <p>Durante ciclos clave, se pondrá a la venta **Cofres Secretos** con ventajas individuales críticas de alta relevancia estratégica. Adquirirlos demandará sacrificar grandes sumas de puntaje acumulado o tomar decisiones explícitas de traición directa hacia los compañeros para obtener el beneficio personal.</p>
+        </div>
+        <div>
+          <h3 class="gold-emboss" style="font-size:20px; margin-top:0;">Corte Reloj de Arena</h3>
+          <p>Esta temporada no cuenta con un número fijo de episodios en su recta final. En cualquier momento del juego y sin previo aviso, **el reality finalizará de manera repentina**. En ese instante exacto, la cantidad neta de puntos acumulados en la tabla dictará el destino final, coronando de forma indiscutible como ganador absoluto al participante con la mayor puntuación de la competencia.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer container">
+  <div>© The Xpedition — The Traitor 3: Revelaciones — Formato Informativo Oficial</div>
+</footer>
+
+<audio id="bgAudio" src="audio/theme.mp3" preload="auto" loop></audio>
+
+<!-- Puertas y Pantalla de Inicio Conservadas de la T2 -->
+<div id="gate"><div class="gate-card"><h2 class="gold-emboss">The Traitor 3</h2><p>El precio de la codicia ha cambiado. Las reglas se han escrito.</p><button id="enterBtn" class="btn">Entrar a la Mansión</button></div></div>
+<div id="doors"><div class="door-panel left"></div><div class="door-panel right"></div></div>
+
+<div id="logoOverlay" aria-hidden="true">
+  <img class="logo" src="The Traitor 1 Logo Transparente.png" alt="The Traitor Logo (overlay)">
+</div>
+
+<script>
+// Manejo de estados de entrada e inicio intactos de la versión T2
+try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch(e){}
+window.addEventListener('load', ()=>{ window.scrollTo(0,0); const g=document.getElementById('gate'), d=document.getElementById('doors'); document.body.classList.add('gated'); if(d){d.classList.remove('open'); d.style.display='none'} if(g){g.style.display='grid'} });
+window.addEventListener('pageshow', ()=>{ window.scrollTo(0,0); const g=document.getElementById('gate'), d=document.getElementById('doors'), a=document.getElementById('bgAudio'); if(d){d.classList.remove('open'); d.style.display='none'} if(g){g.style.display='grid'} document.body.classList.add('gated'); if(a){ a.pause(); document.getElementById('toggleSound')?.setAttribute('aria-pressed','false') }});
+
+const audio = document.getElementById('bgAudio');
+const gate = document.getElementById('gate');
+const doors = document.getElementById('doors');
+const overlay = document.getElementById('logoOverlay');
+
+document.getElementById('enterBtn').addEventListener('click', () => {
+  audio.play().catch(()=>{});
+  document.getElementById('toggleSound').setAttribute('aria-pressed','true');
+
+  doors.style.display='block';
+  void doors.offsetWidth; 
+  doors.classList.add('open');
+
+  gate.style.display='none';
+  document.body.classList.remove('gated');
+
+  if(overlay){
+    overlay.className = 'show';
+    setTimeout(()=>{ overlay.classList.add('fade'); }, 900);
+    setTimeout(()=>{ overlay.style.display='none'; overlay.className=''; }, 1800);
+  }
+  setTimeout(()=>{ doors.style.display='none'; doors.classList.remove('open'); }, 1400);
+});
+
+document.getElementById('toggleSound').addEventListener('click', () => {
+  if(audio.paused){ audio.play().catch(()=>{}); document.getElementById('toggleSound').setAttribute('aria-pressed','true'); }
+  else { audio.pause(); document.getElementById('toggleSound').setAttribute('aria-pressed','false'); }
+});
+
+// Sistema Interactivo de Pestañas Informativas
+document.querySelectorAll('.tab-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    // Desactivar pestañas anteriores
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.info-flow').forEach(flow => flow.classList.remove('active'));
+
+    // Activar pestaña actual
+    button.classList.add('active');
+    const targetId = button.getAttribute('data-target');
+    document.getElementById(targetId).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
